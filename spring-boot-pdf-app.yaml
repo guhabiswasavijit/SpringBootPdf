@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-jwt
+  namespace: java-demo-ns
+spec:
+  selector:
+    matchLabels:
+      run: spring-boot-pdf-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: spring-boot-pdf-service
+    spec:
+       nodeSelector:     
+        kubernetes.io/hostname: k8s-playground-worker3
+       containers:
+        - name: spring-boot-pdf
+          image: avijit1979/spring-boot-pdf:1.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+           - name: LOG_DIR
+             value: /var/log/containers
+           - name: OUTPUT_DIR
+             value: /opt/JavaApps/
+          ports:
+            - containerPort: 8081
+              protocol: TCP
